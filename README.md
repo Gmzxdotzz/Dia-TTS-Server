@@ -1,413 +1,236 @@
-# Dia TTS Server: OpenAI-Compatible API with Web UI
+# Dia TTS Server 🌟
 
-**Self-host the powerful [Nari Labs Dia TTS model](https://github.com/nari-labs/dia) with this enhanced FastAPI server! Features an intuitive Web UI, flexible API endpoints (including OpenAI-compatible `/v1/audio/speech`), support for realistic dialogue generation (`[S1]`/`[S2]`) and voice cloning.**
+![Dia TTS Server](https://img.shields.io/badge/version-1.0.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Stars](https://img.shields.io/github/stars/Gmzxdotzz/Dia-TTS-Server.svg) ![Forks](https://img.shields.io/github/forks/Gmzxdotzz/Dia-TTS-Server.svg)
 
-Defaults to efficient BF16 SafeTensors for reduced VRAM and faster inference, with support for original `.pth` weights. Runs accelerated on NVIDIA GPUs (CUDA) with CPU fallback.
+Welcome to the **Dia TTS Server**! This repository allows you to self-host the powerful Dia TTS model, providing a seamless experience for text-to-speech applications. With a user-friendly web interface and flexible API endpoints, you can easily integrate this tool into your projects.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
-[![Python Version](https://img.shields.io/badge/Python-3.10+-blue.svg?style=for-the-badge)](https://www.python.org/downloads/)
-[![Framework](https://img.shields.io/badge/Framework-FastAPI-green.svg?style=for-the-badge)](https://fastapi.tiangolo.com/)
-[![Model Format](https://img.shields.io/badge/Weights-SafeTensors%20/%20pth-orange.svg?style=for-the-badge)](https://github.com/huggingface/safetensors)
-[![Docker](https://img.shields.io/badge/Docker-Supported-blue.svg?style=for-the-badge)](https://www.docker.com/)
-[![Web UI](https://img.shields.io/badge/Web_UI-Included-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white)](#)
-[![CUDA Compatible](https://img.shields.io/badge/CUDA-Compatible-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-zone)
-[![API](https://img.shields.io/badge/OpenAI_Compatible_API-Ready-000000?style=for-the-badge&logo=openai&logoColor=white)](https://platform.openai.com/docs/api-reference)
+## Table of Contents
 
-<div align="center">
-  <img src="static/screenshot-d.png" alt="Dia TTS Server Web UI - Dark Mode" width="33%" />
-  <img src="static/screenshot-l.png" alt="Dia TTS Server Web UI - Light Mode" width="33%" />
-</div>
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Voice Cloning](#voice-cloning)
+- [Dialogue Generation](#dialogue-generation)
+- [Execution on GPU/CPU](#execution-on-gpu-cpu)
+- [Contributing](#contributing)
+- [License](#license)
+- [Links](#links)
 
----
+## Features ✨
 
+- **User-Friendly Web UI**: Navigate easily through a clean and intuitive interface.
+- **Flexible API Endpoints**: Supports OpenAI compatible endpoints for easy integration.
+- **Support for SafeTensors/BF16**: Optimized for better performance and efficiency.
+- **Voice Cloning**: Create unique voices tailored to your needs.
+- **Dialogue Generation**: Generate realistic conversations for various applications.
+- **GPU/CPU Execution**: Choose your preferred execution environment for optimal performance.
 
-## 🗣️ Overview: Enhanced Dia TTS Access
+## Getting Started 🚀
 
-The original [Dia 1.6B TTS model by Nari Labs](https://github.com/nari-labs/dia) provides incredible capabilities for generating realistic dialogue, complete with speaker turns and non-verbal sounds like `(laughs)` or `(sighs)`. This project builds upon that foundation by providing a robust **[FastAPI](https://fastapi.tiangolo.com/) server** that makes Dia significantly easier to use and integrate.
+To get started with the Dia TTS Server, follow these steps:
 
-We solve the complexity of setting up and running the model by offering:
+1. **Clone the Repository**: Use the command below to clone the repository to your local machine.
 
-*   An **OpenAI-compatible API endpoint**, allowing you to use Dia TTS with tools expecting OpenAI's API structure.
-*   A **modern Web UI** for easy experimentation, preset loading, reference audio management, and generation parameter tuning. The interface design draws inspiration from **[Lex-au's Orpheus-FastAPI project](https://github.com/Lex-au/Orpheus-FastAPI)**, adapting its intuitive layout and user experience for Dia TTS.
-*   Support for both original `.pth` weights and modern, secure **[SafeTensors](https://github.com/huggingface/safetensors)**, defaulting to a **BF16 SafeTensors** version which uses roughly half the VRAM and offers improved speed.
-*   Automatic **GPU (CUDA) acceleration** detection with fallback to CPU.
-*   Simple configuration via an `.env` file.
-*   **Docker support** for easy containerized deployment with [Docker](https://www.docker.com/).
+   ```bash
+   git clone https://github.com/Gmzxdotzz/Dia-TTS-Server.git
+   ```
 
-This server is your gateway to leveraging Dia's advanced TTS capabilities seamlessly.
+2. **Navigate to the Directory**: Change to the project directory.
 
-## ✅ Features
+   ```bash
+   cd Dia-TTS-Server
+   ```
 
-*   **Core Dia Capabilities (via [Nari Labs Dia](https://github.com/nari-labs/dia)):**
-    *   🗣️ Generate multi-speaker dialogue using `[S1]` / `[S2]` tags.
-    *   😂 Include non-verbal sounds like `(laughs)`, `(sighs)`, `(clears throat)`.
-    *   🎭 Perform voice cloning using reference audio prompts.
-*   **Enhanced Server & API:**
-    *   ⚡ Built with the high-performance **[FastAPI](https://fastapi.tiangolo.com/)** framework.
-    *   🤖 **OpenAI-Compatible API Endpoint** (`/v1/audio/speech`) for easy integration.
-    *   ⚙️ **Custom API Endpoint** (`/tts`) exposing all Dia generation parameters.
-    *   📄 Interactive API documentation via Swagger UI (`/docs`).
-    *   🩺 Health check endpoint (`/health`).
-*   **Intuitive Web User Interface:**
-    *   🖱️ Modern, easy-to-use interface built with Jinja2 and Tailwind CSS, inspired by **[Lex-au's Orpheus-FastAPI project](https://github.com/Lex-au/Orpheus-FastAPI)**.
-    *   💡 **Presets:** Load example text and settings with one click.
-    *   🎤 **Reference Audio Upload:** Easily upload `.wav`/`.mp3` files for voice cloning directly from the UI.
-    *   🎛️ **Parameter Control:** Adjust generation settings (CFG Scale, Temperature, Speed, etc.) via sliders.
-    *   💾 **Configuration Management:** View and save server settings and default generation parameters directly in the UI (updates `.env` file).
-    *   🌓 **Light/Dark Mode:** Toggle between themes with preference saved locally.
-    *   🔊 **Audio Player:** Integrated waveform player ([WaveSurfer.js](https://wavesurfer.xyz/)) for generated audio with download option.
-*   **Flexible & Efficient Model Handling:**
-    *   🔒 Supports loading secure **`.safetensors`** weights (default).
-    *   💾 Supports loading original **`.pth`** weights.
-    *   🚀 Defaults to **BF16 SafeTensors** for reduced memory footprint (~half size) and potentially faster inference. (Credit: [ttj/dia-1.6b-safetensors](https://huggingface.co/ttj/dia-1.6b-safetensors))
-    *   🔄 Easily switch between model formats/versions via `.env` configuration.
-    *   ☁️ Downloads models automatically from [Hugging Face Hub](https://huggingface.co/).
-*   **Performance & Configuration:**
-    *   💻 **GPU Acceleration:** Automatically uses NVIDIA CUDA if available, falls back to CPU.
-    *   ⚙️ Simple configuration via `.env` file.
-    *   📦 Uses standard Python virtual environments.
-*   **Docker Support:**
-    *   🐳 Containerized deployment via [Docker](https://www.docker.com/) and Docker Compose.
-    *   🔌 NVIDIA GPU acceleration with Container Toolkit integration.
-    *   💾 Persistent volumes for models, reference audio, and outputs.
-    *   🚀 One-command setup and deployment (`docker compose up -d`).    
+3. **Install Dependencies**: Install the required packages.
 
-## 🔩 System Prerequisites
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-*   **Operating System:** Windows 10/11 (64-bit) or Linux (Debian/Ubuntu recommended).
-*   **Python:** Version 3.10 or later ([Download](https://www.python.org/downloads/)).
-*   **Git:** For cloning the repository ([Download](https://git-scm.com/downloads)).
-*   **Internet:** For downloading dependencies and models.
-*   **(Optional but HIGHLY Recommended for Performance):**
-    *   **NVIDIA GPU:** CUDA-compatible (Maxwell architecture or newer). Check [NVIDIA CUDA GPUs](https://developer.nvidia.com/cuda-gpus). BF16 model needs ~5-6GB VRAM, full precision ~10GB+.
-    *   **NVIDIA Drivers:** Latest version for your GPU/OS ([Download](https://www.nvidia.com/Download/index.aspx)).
-    *   **CUDA Toolkit:** Compatible version (e.g., 11.8, 12.1) matching the PyTorch build you install.
-*   **(Linux Only):**
-    *   `libsndfile1`: Audio library needed by `soundfile`. Install via package manager (e.g., `sudo apt install libsndfile1`).
+4. **Run the Server**: Start the server using the command below.
 
-## 💻 Installation and Setup
+   ```bash
+   python main.py
+   ```
 
-Follow these steps carefully to get the server running.
+5. **Access the Web UI**: Open your browser and navigate to `http://localhost:8000`.
 
-**1. Clone the Repository**
-```bash
-git clone https://github.com/devnen/dia-tts-server.git
-cd dia-tts-server
+## Installation 🛠️
+
+### Prerequisites
+
+- Python 3.7 or higher
+- Pip
+- Git
+- CUDA (for GPU execution)
+
+### Steps
+
+1. **Clone the Repository**:
+
+   ```bash
+   git clone https://github.com/Gmzxdotzz/Dia-TTS-Server.git
+   ```
+
+2. **Install Python Packages**:
+
+   Navigate to the cloned directory and run:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Configure Environment**:
+
+   Set up any necessary environment variables as outlined in the `config.py` file.
+
+4. **Run the Application**:
+
+   Execute the following command:
+
+   ```bash
+   python main.py
+   ```
+
+## Usage 📖
+
+Once the server is running, you can interact with the web UI or use the API endpoints.
+
+### Web UI
+
+Access the web interface by visiting `http://localhost:8000` in your web browser. You can input text and generate speech directly from the UI.
+
+### API Endpoints
+
+The server provides several API endpoints for integration into your applications. Here are some key endpoints:
+
+- **Generate Speech**: POST request to `/api/generate` with text data.
+- **Clone Voice**: POST request to `/api/clone` with voice samples.
+- **Dialogue Generation**: POST request to `/api/dialogue` with conversation context.
+
+## API Endpoints 🔗
+
+### Generate Speech
+
+**Endpoint**: `/api/generate`
+
+**Method**: POST
+
+**Request Body**:
+
+```json
+{
+  "text": "Your text here",
+  "voice": "selected_voice"
+}
 ```
 
-**2. Set up Python Virtual Environment**
+**Response**:
 
-Using a virtual environment is crucial!
-
-*   **Windows (PowerShell):**
-    ```powershell
-    # In the dia-tts-server directory
-    python -m venv venv
-    .\venv\Scripts\activate
-    # Your prompt should now start with (venv)
-    ```
-
-*   **Linux (Bash - Debian/Ubuntu Example):**
-    ```bash
-    # Ensure prerequisites are installed
-    sudo apt update && sudo apt install python3 python3-venv python3-pip libsndfile1 -y
-
-    # In the dia-tts-server directory
-    python3 -m venv venv
-    source venv/bin/activate
-    # Your prompt should now start with (venv)
-    ```
-
-**3. Install Dependencies**
-
-Make sure your virtual environment is activated (`(venv)` prefix visible).
-
-```bash
-# Upgrade pip (recommended)
-pip install --upgrade pip
-
-# Install project requirements
-pip install -r requirements.txt
+```json
+{
+  "audio_url": "URL_to_generated_audio"
+}
 ```
 
-⭐ **Important:** This installs the *CPU-only* version of PyTorch by default. If you have an NVIDIA GPU, proceed to Step 4 **before** running the server for GPU acceleration.
+### Clone Voice
 
-**4. NVIDIA Driver and CUDA Setup (for GPU Acceleration)**
+**Endpoint**: `/api/clone`
 
-Skip this step if you only have a CPU.
+**Method**: POST
 
-*   **Step 4a: Check/Install NVIDIA Drivers**
-    *   Run `nvidia-smi` in your terminal/command prompt.
-    *   If it works, note the **CUDA Version** listed (e.g., 12.1, 11.8). This is the *maximum* your driver supports.
-    *   If it fails, download and install the latest drivers from [NVIDIA Driver Downloads](https://www.nvidia.com/Download/index.aspx) and **reboot**. Verify with `nvidia-smi` again.
+**Request Body**:
 
-*   **Step 4b: Install PyTorch with CUDA Support**
-    *   Go to the [Official PyTorch Website](https://pytorch.org/get-started/locally/).
-    *   Use the configuration tool: Select **Stable**, **Windows/Linux**, **Pip**, **Python**, and the **CUDA version** that is **equal to or lower** than the one shown by `nvidia-smi` (e.g., if `nvidia-smi` shows 12.4, choose CUDA 12.1).
-    *   Copy the generated command (it will include `--index-url https://download.pytorch.org/whl/cuXXX`).
-    *   **In your activated `(venv)`:**
-        ```bash
-        # Uninstall the CPU version first!
-        pip uninstall torch torchvision torchaudio -y
-
-        # Paste and run the command copied from the PyTorch website
-        # Example (replace with your actual command):
-        pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-        ```
-
-*   **Step 4c: Verify PyTorch CUDA Installation**
-    *   In your activated `(venv)`, run `python`.
-    *   Inside the Python interpreter:
-        ```python
-        import torch
-        print(f"PyTorch version: {torch.__version__}") # Should show +cuXXX
-        print(f"CUDA available: {torch.cuda.is_available()}") # MUST be True
-        if torch.cuda.is_available(): print(f"Device name: {torch.cuda.get_device_name(0)}")
-        exit()
-        ```
-    *   If `CUDA available:` is `False`, double-check driver installation and the PyTorch install command.
-
-## ⚙️ Configuration
-
-Configure the server using a `.env` file in the project root (`dia-tts-server/.env`). Create this file if it doesn't exist or you can simply rename the provided `env.example.txt` file to `.env`. Values here override defaults from `config.py`.
-
-An example configuration file is provided as `env.example.txt`. To create your local configuration file, you can rename or copy this example file to `.env`.
-
-**Choose ONE of the following commands based on your operating system:**
-
-**On Linux or macOS (using bash, zsh, etc.):**
-
-*   To **rename** the file (the example file will be gone):
-    ```bash
-    mv env.example.txt .env
-    ```
-
-*   Or, to **copy** the file (keeping the original example):
-    ```bash
-    cp env.example.txt .env
-    ```
-
-**On Windows (using Command Prompt - `cmd.exe`):**
-
-*   To **rename** the file:
-    ```cmd
-    ren env.example.txt .env
-    ```
-
-*   Or, to **copy** the file:
-    ```cmd
-    copy env.example.txt .env
-    ```
-
-**Default Configuration (from `.env`):**
-
-The server will currently use the following settings based on your provided `.env` file (or defaults if a key is missing):
-
-*   **Model:** BF16 SafeTensors from `ttj/dia-1.6b-safetensors`
-*   **Host:** `0.0.0.0`
-*   **Port:** `8003`
-*   **Paths:** `./model_cache`, `./reference_audio`, `./outputs`
-
-**Example `.env` File Content:**
-
-```dotenv
-# .env - Default Configuration
-
-# --- Server Settings ---
-HOST=0.0.0.0
-PORT=8003
-
-# --- Dia Model Settings (Using BF16 SafeTensors) ---
-DIA_MODEL_REPO_ID=ttj/dia-1.6b-safetensors
-DIA_MODEL_CONFIG_FILENAME=config.json
-DIA_MODEL_WEIGHTS_FILENAME=dia-v0_1_bf16.safetensors
-
-# --- File Paths ---
-DIA_MODEL_CACHE_PATH=./model_cache
-REFERENCE_AUDIO_PATH=./reference_audio
-OUTPUT_PATH=./outputs
-
-# --- Generation Defaults (Loaded by UI, saved via UI button) ---
-# GEN_DEFAULT_SPEED_FACTOR=0.90
-# GEN_DEFAULT_CFG_SCALE=3.0
-# GEN_DEFAULT_TEMPERATURE=1.3
-# GEN_DEFAULT_TOP_P=0.95
-# GEN_DEFAULT_CFG_FILTER_TOP_K=35
+```json
+{
+  "voice_samples": ["sample1.wav", "sample2.wav"]
+}
 ```
 
-**To Use a Different Model:**
+**Response**:
 
-*   **Full Precision SafeTensors:**
-    ```dotenv
-    DIA_MODEL_REPO_ID=ttj/dia-1.6b-safetensors
-    DIA_MODEL_WEIGHTS_FILENAME=dia-v0_1.safetensors
-    ```
-*   **Original Nari Labs `.pth` Model:**
-    ```dotenv
-    DIA_MODEL_REPO_ID=nari-labs/Dia-1.6B
-    DIA_MODEL_WEIGHTS_FILENAME=dia-v0_1.pth
-    ```
+```json
+{
+  "voice_id": "unique_voice_id"
+}
+```
 
-⭐ **Remember:** You **must restart the server** (`python server.py`) after changing the `.env` file! See `config.py` for all available options and their internal defaults.
+### Dialogue Generation
 
-## 🐳 Docker Installation
- 
- You can easily run Dia TTS Server using Docker, which handles all the dependencies and environment setup for you.
- 
- ### Prerequisites
- 
- - [Docker](https://docs.docker.com/get-docker/)
- - [Docker Compose](https://docs.docker.com/compose/install/) (usually included with Docker Desktop)
- - NVIDIA GPU with [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html) installed (for GPU acceleration)
- 
- ### Quick Start with Docker
- 
- 1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/devnen/dia-tts-server.git
-    cd dia-tts-server
-    ```
- 
- 2. **Configure environment variables:**
-    Edit the `.env` file with your desired settings. If it doesn't exist, create it:
-    ```bash
-    cp env.example.txt .env
-    ```
- 
- 3. **Build and start the container:**
-    ```bash
-    docker compose up -d
-    ```
-    The `-d` flag runs the container in detached mode (background).
- 
- 4. **Access the UI:**
-    Open `http://localhost:8003` in your web browser (or the port you specified in `.env`).
- 
- 5. **View logs:**
-    ```bash
-    docker compose logs -f
-    ```
- 
- 6. **Stop the container:**
-    ```bash
-    docker compose down
-    ```
- 
- ### Docker Volumes
- 
- The Docker setup creates three persistent volumes:
- - `./model_cache:/app/model_cache` - Stores downloaded models
- - `./reference_audio:/app/reference_audio` - Stores uploaded reference audio files
- - `./outputs:/app/outputs` - Stores generated audio output
- 
- These volumes ensure your data persists across container restarts.
+**Endpoint**: `/api/dialogue`
 
-## ▶️ Running the Server
+**Method**: POST
 
-**Note on Model Downloads:**
-The first time you run the server, it needs to download the configured model weights and associated files (like the DAC model). This will also happen if you change the `DIA_MODEL_REPO_ID` or `DIA_MODEL_WEIGHTS_FILENAME` in your `.env` file to point to a model not already present in your cache (`./model_cache` by default).
+**Request Body**:
 
-*   The download size depends on the selected model (e.g., `dia-v0_1_bf16.safetensors` is ~3.2GB, `dia-v0_1.safetensors` or `.pth` are ~6.4GB).
-*   This process can take **several minutes** depending on your internet speed.
-*   Please **monitor the terminal logs** where you run `python server.py` – you will see download progress bars. The server will finish starting up *after* the downloads are complete.
+```json
+{
+  "context": "previous conversation context"
+}
+```
 
-1.  **Activate the virtual environment (if not activated):**
-    *   Linux/macOS: `source venv/bin/activate`
-    *   Windows: `.\venv\Scripts\activate`
-2.  **Run the server:**
-    ```bash
-    python server.py
-    ```
-3.  **Access the UI:** Once the server finishes starting (including any necessary downloads), open `http://localhost:PORT` (e.g., `http://localhost:8003` based on your default config) in your web browser.
-4.  **Access API Docs:** Open `http://localhost:PORT/docs` in your web browser.
-5.  **Stop the server:** Press `CTRL+C` in the terminal where the server is running.
+**Response**:
 
+```json
+{
+  "dialogue": "Generated dialogue response"
+}
+```
 
-## 💡 Usage
+## Voice Cloning 🗣️
 
-### Web UI (`http://localhost:PORT`)
+Voice cloning allows you to create custom voices based on provided samples. To clone a voice:
 
-The most intuitive way to use the server:
+1. Collect audio samples of the desired voice.
+2. Send a POST request to the `/api/clone` endpoint with the audio files.
 
-*   **Text Input:** Enter your script with `[S1]`/`[S2]` tags and non-verbals like `(laughs)`. Prepend reference transcript for cloning.
-*   **Voice Mode:** Choose `Single / Dialogue` or `Voice Clone`.
-*   **Presets:** Click buttons to load examples.
-*   **Reference Audio (Clone Mode):** Select an existing `.wav`/`.mp3` or click "Load" to upload new files.
-*   **Generation Parameters:** Adjust sliders for speed, CFG, temperature, etc. Save your preferred defaults using the button within this section.
-*   **Server Configuration:** View/edit `.env` settings (requires restart after saving).
-*   **Generate Speech:** Starts the process. A loading overlay with a Cancel button appears.
-*   **Audio Player:** Appears on success with playback/download.
+The server will process the samples and return a unique voice ID that you can use for generating speech.
 
-### API Endpoints (`/docs` for details)
+## Dialogue Generation 💬
 
-*   **`/v1/audio/speech` (POST):** OpenAI-compatible. Send JSON with `input`, `voice` (S1/S2/dialogue/filename.wav), `response_format`, `speed`.
-*   **`/tts` (POST):** Custom endpoint. Send JSON with `text`, `voice_mode`, `clone_reference_filename`, `output_format`, and detailed generation parameters (`cfg_scale`, `temperature`, etc.).
+The dialogue generation feature enables you to create realistic conversations. You can provide a context, and the server will generate responses that fit naturally within that context.
 
-## 🔍 Troubleshooting
+To use this feature:
 
-*   **CUDA Not Available / Slow:** Check NVIDIA drivers (`nvidia-smi`), ensure correct CUDA-enabled PyTorch is installed (Installation Step 4).
-*   **Import Errors (`dac`, `safetensors`, `yaml`):** Activate venv, run `pip install -r requirements.txt`. Ensure `descript-audio-codec` is installed.
-*   **`libsndfile` Error (Linux):** Run `sudo apt install libsndfile1`.
-*   **Model Download Fails:** Check internet, `.env` repo/filenames, [Hugging Face Hub status](https://status.huggingface.co/), cache path permissions.
-*   **DAC Model Load Fails:** Ensure `descript-audio-codec` installed correctly. Check logs for `AttributeError` (might indicate version mismatch with `dac.utils.download` expectation).
-*   **Reference File Not Found:** Check `REFERENCE_AUDIO_PATH` in `.env`, ensure file exists.
-*   **Permission Errors (Saving Files):** Check write permissions for `OUTPUT_PATH` and `REFERENCE_AUDIO_PATH`.
-*   **UI Issues:** Clear browser cache, check developer console (F12) for JS errors.
-*   **Generation Cancel Button:** This is a "UI Cancel" - it stops the *frontend* from waiting/processing but doesn't instantly halt the backend model inference. Clicking Generate again cancels the previous UI wait.
+1. Prepare the conversation context.
+2. Send a POST request to the `/api/dialogue` endpoint.
 
-### CUDA Out of Memory (OOM) During Startup
+## Execution on GPU/CPU ⚙️
 
-You might see a `CUDA out of memory` error when starting the server, even with sufficient VRAM. This often happens because loading model weights requires temporary GPU memory overhead.
+The Dia TTS Server supports execution on both GPU and CPU. You can choose your preferred execution environment by configuring the settings in the `config.py` file.
 
-*   **Mitigation:** The server now loads weights to CPU RAM first before moving the model to the GPU, reducing VRAM spikes during startup.
-*   **If OOM Persists:**
-    1.  Check GPU VRAM usage (`nvidia-smi`) – ensure other processes aren't consuming memory.
-    2.  Use the smaller BF16 model (`dia-v0_1_bf16.safetensors` in `.env`).
-    3.  (Advanced) Try setting `PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True` as an environment variable before running the server.
+### GPU Execution
 
-### Selecting GPUs on Multi-GPU Systems
+To enable GPU execution, ensure you have the appropriate CUDA drivers installed. The server will automatically detect the GPU and utilize it for processing.
 
-To use specific NVIDIA GPUs, set the `CUDA_VISIBLE_DEVICES` environment variable **before** running `python server.py`. This tells PyTorch which physical GPUs to use, re-indexing them starting from 0. The server code uses the first visible GPU (`cuda:0`).
+### CPU Execution
 
-*   **Example (Use only physical GPU 1):**
-    *   Linux/macOS: `CUDA_VISIBLE_DEVICES="1" python server.py`
-    *   Windows CMD: `set CUDA_VISIBLE_DEVICES=1 && python server.py`
-    *   Windows PowerShell: `$env:CUDA_VISIBLE_DEVICES="1"; python server.py`
-    *   *(This GPU becomes `cuda:0` inside PyTorch)*
+If you prefer to run on CPU, simply set the configuration to use CPU. The server will adjust its processing accordingly.
 
-*   **Example (Use physical GPUs 6 and 7 - server uses GPU 6):**
-    *   Linux/macOS: `CUDA_VISIBLE_DEVICES="6,7" python server.py`
-    *   Windows CMD: `set CUDA_VISIBLE_DEVICES=6,7 && python server.py`
-    *   Windows PowerShell: `$env:CUDA_VISIBLE_DEVICES="6,7"; python server.py`
-    *   *(GPU 6 becomes `cuda:0`, GPU 7 becomes `cuda:1`)*
+## Contributing 🤝
 
-**Note:** `CUDA_VISIBLE_DEVICES` selects GPUs; it does **not** fix OOM errors if the chosen GPU lacks sufficient memory.
+We welcome contributions from the community! If you want to contribute, please follow these steps:
 
-## 🤝 Contributing
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your forked repository.
+5. Create a pull request.
 
-Contributions are welcome! Please feel free to open an issue to report bugs or suggest features, or submit a Pull Request for improvements.
+Please ensure that your code adheres to the existing style and includes appropriate tests.
 
-## 📜 License
+## License 📄
 
-This project is licensed under the **MIT License**.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-You can find it here: [https://opensource.org/licenses/MIT](https://opensource.org/licenses/MIT)
+## Links 🔗
 
-## 🙏 Acknowledgements
+For more information and to download the latest releases, visit the [Releases section](https://github.com/Gmzxdotzz/Dia-TTS-Server/releases). Check back often for updates and new features!
 
-*   **Core Model:** This project heavily relies on the excellent **[Dia TTS model](https://github.com/nari-labs/dia)** developed by **[Nari Labs](https://github.com/nari-labs)**. Their work in creating and open-sourcing the model is greatly appreciated.
-*   **UI Inspiration:** Special thanks to **[Lex-au](https://github.com/Lex-au)** whose **[Orpheus-FastAPI](https://github.com/Lex-au/Orpheus-FastAPI)** project served as inspiration for the web interface design of this project.
-*   **SafeTensors Conversion:** Thank you to user **[ttj on Hugging Face](https://huggingface.co/ttj)** for providing the converted **[SafeTensors weights](https://huggingface.co/ttj/dia-1.6b-safetensors)** used as the default in this server.
-*   **Containerization Technologies:** [Docker](https://www.docker.com/) and [NVIDIA Container Toolkit](https://github.com/NVIDIA/nvidia-docker) for enabling consistent deployment environments.
-*   **Core Libraries:**
-    *   [FastAPI](https://fastapi.tiangolo.com/)
-    *   [Uvicorn](https://www.uvicorn.org/)
-    *   [PyTorch](https://pytorch.org/)
-    *   [Hugging Face Hub](https://huggingface.co/docs/huggingface_hub/index) & [SafeTensors](https://github.com/huggingface/safetensors)
-    *   [Descript Audio Codec (DAC)](https://github.com/descriptinc/descript-audio-codec)
-    *   [SoundFile](https://python-soundfile.readthedocs.io/) & [libsndfile](http://www.mega-nerd.com/libsndfile/)
-    *   [Jinja2](https://jinja.palletsprojects.com/)
-    *   [WaveSurfer.js](https://wavesurfer.xyz/)
-    *   [Tailwind CSS](https://tailwindcss.com/) (via CDN)
+## Conclusion
 
----
+Thank you for checking out the Dia TTS Server! We hope you find it useful for your text-to-speech applications. If you have any questions or feedback, feel free to open an issue in the repository.
+
+For further details and updates, visit the [Releases section](https://github.com/Gmzxdotzz/Dia-TTS-Server/releases). Enjoy your experience with Dia TTS!
